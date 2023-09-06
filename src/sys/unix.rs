@@ -128,6 +128,7 @@ pub(crate) use libc::ipv6_mreq as Ipv6Mreq;
     target_os = "solaris",
     target_os = "haiku",
     target_os = "espidf",
+    target_os = "vita",
 )))]
 pub(crate) use libc::IPV6_RECVTCLASS;
 #[cfg(all(feature = "all", not(any(target_os = "redox", target_os = "espidf"))))]
@@ -144,6 +145,7 @@ pub(crate) use libc::IP_HDRINCL;
     target_os = "haiku",
     target_os = "nto",
     target_os = "espidf",
+    target_os = "vita",
 )))]
 pub(crate) use libc::IP_RECVTOS;
 #[cfg(not(any(
@@ -183,6 +185,7 @@ pub(crate) use libc::{
     target_os = "fuchsia",
     target_os = "nto",
     target_os = "espidf",
+    target_os = "vita",
 )))]
 pub(crate) use libc::{
     ip_mreq_source as IpMreqSource, IP_ADD_SOURCE_MEMBERSHIP, IP_DROP_SOURCE_MEMBERSHIP,
@@ -255,6 +258,7 @@ use libc::TCP_KEEPALIVE as KEEPALIVE_TIME;
     target_os = "openbsd",
     target_os = "tvos",
     target_os = "watchos",
+    target_os = "vita",
 )))]
 use libc::TCP_KEEPIDLE as KEEPALIVE_TIME;
 
@@ -335,6 +339,7 @@ type IovLen = usize;
     target_os = "tvos",
     target_os = "watchos",
     target_os = "espidf",
+    target_os = "vita",
 ))]
 type IovLen = c_int;
 
@@ -1118,10 +1123,16 @@ fn into_timeval(duration: Option<Duration>) -> libc::timeval {
     }
 }
 
-#[cfg(all(feature = "all", not(any(target_os = "haiku", target_os = "openbsd"))))]
+#[cfg(all(
+    feature = "all",
+    not(any(target_os = "haiku", target_os = "openbsd", target_os = "vita"))
+))]
 #[cfg_attr(
     docsrs,
-    doc(cfg(all(feature = "all", not(any(target_os = "haiku", target_os = "openbsd")))))
+    doc(cfg(all(
+        feature = "all",
+        not(any(target_os = "haiku", target_os = "openbsd", target_os = "vita"))
+    )))
 )]
 pub(crate) fn keepalive_time(fd: Socket) -> io::Result<Duration> {
     unsafe {
@@ -1132,7 +1143,12 @@ pub(crate) fn keepalive_time(fd: Socket) -> io::Result<Duration> {
 
 #[allow(unused_variables)]
 pub(crate) fn set_tcp_keepalive(fd: Socket, keepalive: &TcpKeepalive) -> io::Result<()> {
-    #[cfg(not(any(target_os = "haiku", target_os = "openbsd", target_os = "nto")))]
+    #[cfg(not(any(
+        target_os = "haiku",
+        target_os = "openbsd",
+        target_os = "nto",
+        target_os = "vita"
+    )))]
     if let Some(time) = keepalive.time {
         let secs = into_secs(time);
         unsafe { setsockopt(fd, libc::IPPROTO_TCP, KEEPALIVE_TIME, secs)? }
@@ -1172,7 +1188,12 @@ pub(crate) fn set_tcp_keepalive(fd: Socket, keepalive: &TcpKeepalive) -> io::Res
     Ok(())
 }
 
-#[cfg(not(any(target_os = "haiku", target_os = "openbsd", target_os = "nto")))]
+#[cfg(not(any(
+    target_os = "haiku",
+    target_os = "openbsd",
+    target_os = "nto",
+    target_os = "vita"
+)))]
 fn into_secs(duration: Duration) -> c_int {
     min(duration.as_secs(), c_int::MAX as u64) as c_int
 }
@@ -1275,6 +1296,7 @@ pub(crate) fn from_in6_addr(addr: in6_addr) -> Ipv6Addr {
     target_os = "solaris",
     target_os = "nto",
     target_os = "espidf",
+    target_os = "vita",
 )))]
 pub(crate) const fn to_mreqn(
     multiaddr: &Ipv4Addr,

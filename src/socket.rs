@@ -1245,6 +1245,7 @@ impl Socket {
         target_os = "solaris",
         target_os = "nto",
         target_os = "espidf",
+        target_os = "vita",
     )))]
     pub fn join_multicast_v4_n(
         &self,
@@ -1277,6 +1278,7 @@ impl Socket {
         target_os = "solaris",
         target_os = "nto",
         target_os = "espidf",
+        target_os = "vita",
     )))]
     pub fn leave_multicast_v4_n(
         &self,
@@ -1310,6 +1312,7 @@ impl Socket {
         target_os = "fuchsia",
         target_os = "nto",
         target_os = "espidf",
+        target_os = "vita",
     )))]
     pub fn join_ssm_v4(
         &self,
@@ -1346,6 +1349,7 @@ impl Socket {
         target_os = "fuchsia",
         target_os = "nto",
         target_os = "espidf",
+        target_os = "vita",
     )))]
     pub fn leave_ssm_v4(
         &self,
@@ -1524,6 +1528,7 @@ impl Socket {
         target_os = "haiku",
         target_os = "nto",
         target_os = "espidf",
+        target_os = "vita",
     )))]
     pub fn set_recv_tos(&self, recv_tos: bool) -> io::Result<()> {
         unsafe {
@@ -1553,6 +1558,7 @@ impl Socket {
         target_os = "haiku",
         target_os = "nto",
         target_os = "espidf",
+        target_os = "vita",
     )))]
     pub fn recv_tos(&self) -> io::Result<bool> {
         unsafe {
@@ -1769,6 +1775,7 @@ impl Socket {
         target_os = "solaris",
         target_os = "haiku",
         target_os = "espidf",
+        target_os = "vita",
     )))]
     pub fn recv_tclass_v6(&self) -> io::Result<bool> {
         unsafe {
@@ -1792,6 +1799,7 @@ impl Socket {
         target_os = "solaris",
         target_os = "haiku",
         target_os = "espidf",
+        target_os = "vita",
     )))]
     pub fn set_recv_tclass_v6(&self, recv_tclass: bool) -> io::Result<()> {
         unsafe {
@@ -1817,13 +1825,23 @@ impl Socket {
     /// supported Unix operating systems.
     #[cfg(all(
         feature = "all",
-        not(any(windows, target_os = "haiku", target_os = "openbsd"))
+        not(any(
+            windows,
+            target_os = "haiku",
+            target_os = "openbsd",
+            target_os = "vita"
+        ))
     ))]
     #[cfg_attr(
         docsrs,
         doc(cfg(all(
             feature = "all",
-            not(any(windows, target_os = "haiku", target_os = "openbsd"))
+            not(any(
+                windows,
+                target_os = "haiku",
+                target_os = "openbsd",
+                target_os = "vita"
+            ))
         )))
     )]
     pub fn keepalive_time(&self) -> io::Result<Duration> {
